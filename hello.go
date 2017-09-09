@@ -5,12 +5,14 @@ import (
 	"os"
 	"net/http"
 	"time"
+	"io/ioutil"
 )
 
 const monitoramento = 3
 const delay = 5
 
 func main() {
+	leSitesDoArquivo()
 
 	exibeIntroducao()
 
@@ -73,7 +75,11 @@ func iniciaMonitoramento(){
 }
 
 func testaSite(site string){
-	response, _ := http.Get(site)
+	response, err := http.Get(site)
+
+	if err != nil {
+		fmt.Println("Ocorreu um erro", err)
+	}
 
 	fmt.Println(response)
 	if response.StatusCode == 200 {
@@ -81,4 +87,18 @@ func testaSite(site string){
 	} else {
 		fmt.Println("Site", site, "com probelmas. StatusCode é de", response.StatusCode)
 	}
+}
+
+func leSitesDoArquivo() []string{
+
+	var sites[] string
+
+	//arquivo, err := os.Open("sites.txt")
+	arquivo, err := ioutil.ReadFile("sites.txt")
+
+	if err != nil {
+		fmt.Println("Ocorreu um erro", err)
+	}
+	fmt.Println(string(arquivo))
+	return sites
 }
